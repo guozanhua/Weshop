@@ -112,13 +112,18 @@ public class MainActivity extends BaseActivity {
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-                String cart_fragment = MainActivity.this.getString(R.string.tab_cart);
-                String mine_fragment = MainActivity.this.getString(R.string.tab_mine);
-                if (tabId == cart_fragment) {
+                Log.d(TAG, "onTabChanged: "+tabId);
+                String cart_fragment = getApplicationContext().getString(R.string.tab_cart);
+                String mine_fragment = getApplicationContext().getString(R.string.tab_mine);
+//                Log.d(TAG, "onTabChanged: "+cart_fragment+mine_fragment);
+                if (tabId .equals(cart_fragment) ) {//String==可能不正确,
+                    Log.d(TAG, "onTabChanged: cart_fragment");
                     MainActivity.this.setCartFragmentUI(cart_fragment);
-                } else if (tabId == mine_fragment) {
+                } else if (tabId .equals(mine_fragment)) {
+                    Log.d(TAG, "onTabChanged: mine_fragment");
                     MainActivity.this.setMineFragmentUi(mine_fragment);
                 } else {
+                    Log.d(TAG, "onTabChanged: restoreToolbar");
                     MainActivity.this.restoreToolbar();
                 }
             }
