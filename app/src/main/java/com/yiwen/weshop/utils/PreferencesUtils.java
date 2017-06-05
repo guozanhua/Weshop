@@ -28,7 +28,7 @@ import android.content.SharedPreferences;
  */
 public class PreferencesUtils {
 
-    public static String PREFERENCE_NAME = "Cniao_Pref_Common";
+    public static String PREFERENCE_NAME = "Weshop_Pref_Common";
 
     /**
      * put string preferences
