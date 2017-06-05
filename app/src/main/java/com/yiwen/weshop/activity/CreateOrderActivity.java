@@ -193,6 +193,9 @@ public class CreateOrderActivity extends BaseActivity {
             @Override
             public void onTokenError(Response response, int code) {
                 mBtnCreateOrder.setEnabled(true);
+                ToastUtils.show(CreateOrderActivity.this,"TOKEN错误，请重新登录");
+                Intent intent=new Intent(CreateOrderActivity.this,LoginActivity.class);
+                startActivity(intent);
             }
         });
     }

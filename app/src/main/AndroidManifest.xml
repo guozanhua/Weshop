@@ -84,10 +84,10 @@
         <!-- sms data start -->
         <meta-data
             android:name="mob_sms_appKey"
-            android:value="ba92fe610bb4"/>
+            android:value="1dfed2cdde843"/>
         <meta-data
             android:name="mob_sms_appSecrect"
-            android:value="e73deba501fb3faaa1b5c2729e3eedbe"/>
+            android:value="4266d445a7c298caecfb04ecb165fde7"/>
         <!-- sms data end -->
         <activity android:name=".activity.RegActivity">
         </activity>

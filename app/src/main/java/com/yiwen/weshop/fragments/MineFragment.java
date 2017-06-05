@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,6 +100,8 @@ public class MineFragment extends BaseFragment {
 
     private void loginUI(User user) {
         mTvUserName.setText(user.getUsername());
+        if (TextUtils.isEmpty(user.getLogo_url()))
+            Picasso.with(getActivity()).load(R.drawable.default_head).into(mCivHeader);
         Picasso.with(getActivity()).load(user.getLogo_url()).into(mCivHeader);
         mBtnLogout.setVisibility(View.VISIBLE);
     }
@@ -148,5 +151,10 @@ public class MineFragment extends BaseFragment {
     @Event(R.id.id_tv_my_favorites)
     private void toMyFavorites(View v) {
         startActivity(new Intent(getActivity(), MyFavoriteActivity.class),true);
+    }
+
+    @Event(R.id.id_tv_my_msg)
+    private void toMyMassage(View v) {
+        ToastUtils.show(getActivity(),"click 我的消息");
     }
 }
