@@ -2,11 +2,13 @@ package com.yiwen.weshop;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
@@ -63,38 +65,49 @@ public class MainActivity extends BaseActivity {
 
     /**
      * des:提供其他fragment 改变toolbar样式
+     *
      * @return
      */
-    public MyToolBar getMyToolbar(){
+    public MyToolBar getMyToolbar() {
         return mToolBar;
     }
 
     private void initSeach() {
         // TODO: 2017/6/4  搜索功能 语音搜索
-//        mToolBar.getSearchEditText().addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                Log.d(TAG, "onTextChanged: 输入"+s);
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//            }
-//        });
+        //        mToolBar.getSearchEditText().addTextChangedListener(new TextWatcher() {
+        //            @Override
+        //            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        //
+        //            }
+        //
+        //            @Override
+        //            public void onTextChanged(CharSequence s, int start, int before, int count) {
+        //                Log.d(TAG, "onTextChanged: 输入"+s);
+        //            }
+        //
+        //            @Override
+        //            public void afterTextChanged(Editable s) {
+        //
+        //            }
+        //        });
         //按搜索触发
         mToolBar.getSearchEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId== EditorInfo.IME_ACTION_SEARCH)
-                    ToastUtils.show(MainActivity.this,"搜索"+v.getText());
-                Log.d(TAG, "onEditorAction: "+String.valueOf(actionId));
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    InputMethodManager manager = (InputMethodManager)
+                            getSystemService(INPUT_METHOD_SERVICE);
+                    manager.hideSoftInputFromWindow(MainActivity.this.getCurrentFocus().getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+                if (TextUtils.isEmpty(v.getText())){
+                    ToastUtils.show(MainActivity.this, "输入为空" );
+                }{
+                ToastUtils.show(MainActivity.this, "搜索" + v.getText());//startSearch();
+                Log.d(TAG, "onEditorAction: " + String.valueOf(actionId));
+                mToolBar.getSearchEditText().setCursorVisible(false);
                 return false;
+                }
             }
         });
     }
@@ -118,14 +131,16 @@ public class MainActivity extends BaseActivity {
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-                Log.d(TAG, "onTabChanged: "+tabId);
+                mToolBar.getSearchEditText().setText("");
+                mToolBar.getSearchEditText().clearFocus();
+                Log.d(TAG, "onTabChanged: " + tabId);
                 String cart_fragment = getApplicationContext().getString(R.string.tab_cart);
                 String mine_fragment = getApplicationContext().getString(R.string.tab_mine);
-//                Log.d(TAG, "onTabChanged: "+cart_fragment+mine_fragment);
-                if (tabId .equals(cart_fragment) ) {//String==可能不正确,
+                //                Log.d(TAG, "onTabChanged: "+cart_fragment+mine_fragment);
+                if (tabId.equals(cart_fragment)) {//String==可能不正确,
                     Log.d(TAG, "onTabChanged: cart_fragment");
                     MainActivity.this.setCartFragmentUI(cart_fragment);
-                } else if (tabId .equals(mine_fragment)) {
+                } else if (tabId.equals(mine_fragment)) {
                     Log.d(TAG, "onTabChanged: mine_fragment");
                     MainActivity.this.setMineFragmentUi(mine_fragment);
                 } else {

@@ -22,7 +22,7 @@ import com.yiwen.weshop.R;
  * User: Yiwen(https://github.com/yiwent)
  * Date: 2017-05-02
  * Time: 11:00
- * FIXME
+ *
  */
 public class MyToolBar extends Toolbar {
 

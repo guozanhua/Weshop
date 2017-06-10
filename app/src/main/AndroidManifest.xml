@@ -34,7 +34,7 @@
         android:supportsRtl="true"
         android:theme="@style/MyAppTheme">
         <activity android:name=".MainActivity"
-                  android:windowSoftInputMode="adjustPan">
+                  android:windowSoftInputMode="adjustPan|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -63,6 +63,24 @@
         </activity>
         <activity android:name=".activity.WareListActivity">
         </activity>
+
+        <activity android:name=".activity.RegActivity">
+        </activity>
+        <activity android:name=".activity.AddressListActivity">
+        </activity>
+        <activity android:name=".activity.MyOrderActivity">
+        </activity>
+        <activity android:name=".activity.MyFavoriteActivity">
+        </activity>
+        <activity android:name=".activity.RegSecondActivity">
+        </activity>
+        <activity android:name=".activity.AddressAddActivity">
+        </activity>
+        <activity android:name=".activity.OrderDetailActivity">
+        </activity>
+        <activity android:name=".activity.NewOrderActivity">
+        </activity>
+
         <!-- sharesdk -->
         <activity
             android:name="com.mob.tools.MobUIShell"
@@ -89,16 +107,7 @@
             android:name="mob_sms_appSecrect"
             android:value="4266d445a7c298caecfb04ecb165fde7"/>
         <!-- sms data end -->
-        <activity android:name=".activity.RegActivity">
-        </activity>
-        <activity android:name=".activity.AddressListActivity">
-        </activity>
-        <activity android:name=".activity.MyOrderActivity">
-        </activity>
-        <activity android:name=".activity.MyFavoriteActivity">
-        </activity>
-        <activity android:name=".activity.RegSecondActivity">
-        </activity>
+        <!--p++-->
         <activity
             android:name="com.pingplusplus.android.PaymentActivity"
             android:configChanges="orientation|screenSize"
@@ -283,12 +292,7 @@
             android:hardwareAccelerated="false"
             android:theme="@style/EbpayThemeActivit"
             android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".activity.AddressAddActivity">
-        </activity>
-        <activity android:name=".activity.OrderDetailActivity">
-        </activity>
-        <activity android:name=".activity.NewOrderActivity">
-        </activity>
+
     </application>
 
 </manifest>
