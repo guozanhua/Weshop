@@ -32,6 +32,7 @@ import com.yiwen.weshop.bean.HomeCampaign;
 import com.yiwen.weshop.http.BaseCallback;
 import com.yiwen.weshop.http.OkHttpHelper;
 import com.yiwen.weshop.http.SpotsCallback;
+import com.yiwen.weshop.utils.CommonUtils;
 import com.yiwen.weshop.utils.JSONUtil;
 import com.yiwen.weshop.utils.PreferencesUtils;
 import com.yiwen.weshop.utils.ToastUtils;
@@ -50,8 +51,10 @@ import okhttp3.Response;
  * Time: 23:34
  */
 public class HomeFragment extends BaseFragment {
+    @ViewInject(R.id.slider)
     SliderLayout   mSliderLayout;
     PagerIndicator mPagerIndicator;
+    @ViewInject(R.id.recyclerview)
     RecyclerView   mRecyclerView;
     private OkHttpHelper mHelper = OkHttpHelper.getInstance();
     private List<Banner>        mBanners;
@@ -69,8 +72,6 @@ public class HomeFragment extends BaseFragment {
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
-        mSliderLayout = (SliderLayout) view.findViewById(R.id.slider);
         return view;
     }
 
@@ -80,14 +81,14 @@ public class HomeFragment extends BaseFragment {
         mRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
             @Override
             public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {
-                requestSlideImage();
+//                requestSlideImage();
                 requestRecyecleView();
                 mRefreshLayout.finishRefreshing();
             }
 
             @Override
             public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
-                requestSlideImage();
+//                requestSlideImage();
                 requestRecyecleView();
                 mRefreshLayout.finishRefreshLoadMore();
             }
@@ -187,7 +188,12 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onRequestBefor(Request request) {
-
+                if (!CommonUtils.isNetworkAvailable(getActivity())){
+                    ToastUtils.show(getActivity(),"网络未连接，请打开网络");
+                    mRefreshLayout.finishRefresh();
+                    mRefreshLayout.finishRefreshLoadMore();
+                    return;
+                }
             }
 
             @Override

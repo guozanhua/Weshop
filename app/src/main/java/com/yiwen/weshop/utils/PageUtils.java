@@ -22,6 +22,7 @@ import java.util.Map;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static com.yiwen.weshop.utils.PageUtils.Builder.context;
 
 
 public class PageUtils {
@@ -75,7 +76,7 @@ public class PageUtils {
                 if (sBuilder.pageIndex < sBuilder.pageSize) {
                     loadMoreData();
                 } else {
-                    Toast.makeText(sBuilder.context, R.string.no_have, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.no_have, Toast.LENGTH_SHORT).show();
                     sBuilder.refreshLayout.finishRefreshLoadMore();
                 }
             }
@@ -87,7 +88,7 @@ public class PageUtils {
     private void doGetReq() {
         String url = buildUrl();
         Log.d(TAG, "doGetReq: " + url);
-        mHelper.doGet(url, new RequestCallback(sBuilder.context, sBuilder.type));
+        mHelper.doGet(url, new RequestCallback(context, sBuilder.type));
     }
 
     private void doPostReq() {
@@ -207,7 +208,7 @@ public class PageUtils {
 
         private static boolean canLoadMore = false;
 
-        private static Context context;
+        public static Context context;
         private static Type type;
         private static RequestType requestType = RequestType.GET;
 
@@ -297,6 +298,15 @@ public class PageUtils {
         }
 
         @Override
+        public void onRequestBefor(Request request) {
+            if (!CommonUtils.isNetworkAvailable(context)){
+                ToastUtils.show(context,"网络未连接，请打开网络");
+                return;
+            }
+            super.onRequestBefor(request);
+        }
+
+        @Override
         public void onSuccess(Response response, Page<T> page) {
             sBuilder.pageIndex = page.getCurrentPage();
             sBuilder.totalPage = page.getTotalPage();
@@ -306,7 +316,7 @@ public class PageUtils {
 
         @Override
         public void onError(Response response, int errCode, Exception e) {
-            Toast.makeText(sBuilder.context, R.string.get_data_error, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.get_data_error, Toast.LENGTH_SHORT).show();
             finishStatus();
         }
 

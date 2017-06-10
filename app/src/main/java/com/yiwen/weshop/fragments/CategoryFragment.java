@@ -38,6 +38,7 @@ import com.yiwen.weshop.bean.Wares;
 import com.yiwen.weshop.http.BaseCallback;
 import com.yiwen.weshop.http.OkHttpHelper;
 import com.yiwen.weshop.http.SpotsCallback;
+import com.yiwen.weshop.utils.CommonUtils;
 import com.yiwen.weshop.utils.JSONUtil;
 import com.yiwen.weshop.utils.PreferencesUtils;
 import com.yiwen.weshop.utils.ToastUtils;
@@ -173,12 +174,18 @@ public class CategoryFragment extends BaseFragment {
         mOkHttpHelper.doGet(url, new BaseCallback<Page<Wares>>() {
             @Override
             public void onRequestBefor(Request request) {
-
+                if (!CommonUtils.isNetworkAvailable(getActivity())){
+                    ToastUtils.show(getActivity(),"网络未连接，请打开网络");
+                    mRefreshLayout.finishRefresh();
+                    mRefreshLayout.finishRefreshLoadMore();
+                    return;
+                }
             }
 
             @Override
             public void onFailure(Request request, IOException e) {
-
+                mRefreshLayout.finishRefresh();
+                mRefreshLayout.finishRefreshLoadMore();
             }
 
             @Override
@@ -191,7 +198,8 @@ public class CategoryFragment extends BaseFragment {
 
             @Override
             public void onError(Response response, int errCode, Exception e) {
-
+                mRefreshLayout.finishRefresh();
+                mRefreshLayout.finishRefreshLoadMore();
             }
 
             @Override

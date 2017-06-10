@@ -25,7 +25,7 @@ public abstract class BaseFragment extends Fragment {
         x.view().inject(this, view);
         initToolBar();
         init();
-        checkNetword();
+     //   checkNetword();
         return view;
     }
 
