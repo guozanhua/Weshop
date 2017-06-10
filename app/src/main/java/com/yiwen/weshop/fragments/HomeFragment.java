@@ -145,6 +145,7 @@ public class HomeFragment extends BaseFragment {
 
     private void initSlider() {
         if (mBanners != null) {
+            mSliderLayout.removeAllSliders();
             for (final Banner banner : mBanners) {
                 TextSliderView textSliderView = new TextSliderView(this.getActivity());
                 textSliderView.image(banner.getImgUrl());
