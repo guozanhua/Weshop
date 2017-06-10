@@ -8,18 +8,21 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.baidu.wallet.core.utils.Md5Utils;
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
+import com.google.gson.reflect.TypeToken;
 import com.yiwen.weshop.Contants;
 import com.yiwen.weshop.R;
 import com.yiwen.weshop.activity.WareDetailActivity;
@@ -35,6 +38,8 @@ import com.yiwen.weshop.bean.Wares;
 import com.yiwen.weshop.http.BaseCallback;
 import com.yiwen.weshop.http.OkHttpHelper;
 import com.yiwen.weshop.http.SpotsCallback;
+import com.yiwen.weshop.utils.JSONUtil;
+import com.yiwen.weshop.utils.PreferencesUtils;
 import com.yiwen.weshop.utils.ToastUtils;
 
 import org.xutils.view.annotation.ViewInject;
@@ -62,6 +67,10 @@ public class CategoryFragment extends BaseFragment {
     private CategoryAdapter mCategoryAdapter;
     private WaresAdapter    mWaresAdapter;
 
+    private List<Category> mCategories;
+    private List<Banner>   mBanners;
+    private List<Wares>    mWares;
+
 
     @Nullable
     @Override
@@ -83,9 +92,32 @@ public class CategoryFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        checLocalData();
         requestCategoryData();
         requestBannerData();
         initRefreshLayout();
+    }
+
+    private void checLocalData() {
+        String banners = PreferencesUtils.getString(getActivity(),
+                Md5Utils.toMD5(Contants.API.BANNER_HOME), null);
+        String categories = PreferencesUtils.getString(getActivity(),
+                Md5Utils.toMD5(Contants.API.CATEGORY_LIST), null);
+        String wares = PreferencesUtils.getString(getActivity(),
+                Md5Utils.toMD5("mData"), null);
+        if (!TextUtils.isEmpty(banners) && !TextUtils.isEmpty(categories)
+                &&!TextUtils.isEmpty(wares)) {
+            mBanners = JSONUtil.fromJson(banners, new TypeToken<List<Banner>>() {
+            }.getType());
+            showSliderView();
+            mCategories = JSONUtil.fromJson(categories, new TypeToken<List<Category>>() {
+            }.getType());
+            showCategoryData(mCategories);
+            mWares = JSONUtil.fromJson(wares, new TypeToken<List<Wares>>() {
+            }.getType());
+            showWaresData(mWares);
+            return;
+        }
     }
 
     private void initRefreshLayout() {
@@ -175,6 +207,7 @@ public class CategoryFragment extends BaseFragment {
     }
 
     private void showWaresData(List<Wares> wares) {
+
         switch (state) {
             case STATE_NORMAL:
                 if (mWaresAdapter == null) {
@@ -183,7 +216,8 @@ public class CategoryFragment extends BaseFragment {
                         @Override
                         public void onClick(View v, int position) {
                             Intent intent = new Intent(getActivity(), WareDetailActivity.class);
-                            intent.putExtra(Contants.API.WARE_ITEM, mWaresAdapter.getItem(position));startActivity(intent);
+                            intent.putExtra(Contants.API.WARE_ITEM, mWaresAdapter.getItem(position));
+                            startActivity(intent);
                         }
                     });
                     mWaresRecycleView.setAdapter(mWaresAdapter);
@@ -210,8 +244,11 @@ public class CategoryFragment extends BaseFragment {
                 mWaresAdapter.addData(wares);
                 //                mWaresRecycleView.scrollToPosition(mCategoryAdapter.getDataSize());
                 mRefreshLayout.finishRefreshLoadMore();
+
                 break;
         }
+        PreferencesUtils.putString(getActivity(),
+                Md5Utils.toMD5("mData"), JSONUtil.toJSON(mWaresAdapter.getDatas()));
     }
 
     private void requestBannerData() {
@@ -219,7 +256,10 @@ public class CategoryFragment extends BaseFragment {
 
             @Override
             public void onSuccess(Response response, List<Banner> banners) {
-                showSliderView(banners);
+                mBanners = banners;
+                PreferencesUtils.putString(getActivity(),
+                        Md5Utils.toMD5(Contants.API.BANNER_HOME), JSONUtil.toJSON(banners));
+                showSliderView();
             }
 
             @Override
@@ -229,9 +269,9 @@ public class CategoryFragment extends BaseFragment {
         });
     }
 
-    private void showSliderView(List<Banner> banners) {
-        if (banners != null) {
-            for (Banner banner : banners) {
+    private void showSliderView() {
+        if (mBanners != null) {
+            for (Banner banner : mBanners) {
                 DefaultSliderView defaultSliderView = new DefaultSliderView(this.getActivity());
                 defaultSliderView.image(banner.getImgUrl());
                 defaultSliderView.description(banner.getName());
@@ -239,7 +279,7 @@ public class CategoryFragment extends BaseFragment {
                     @Override
                     public void onSliderClick(BaseSliderView slider) {
                         // TODO: 2017/6/4 跳转活动页面
-                        ToastUtils.show(getActivity(),"跳转至"+slider.getDescription());
+                        ToastUtils.show(getActivity(), "跳转至" + slider.getDescription());
                     }
                 });
                 mSliderLayout.addSlider(defaultSliderView);
@@ -273,6 +313,9 @@ public class CategoryFragment extends BaseFragment {
     }
 
     private void showCategoryData(List<Category> datas) {
+        mCategories = datas;
+        PreferencesUtils.putString(getActivity(),
+                Md5Utils.toMD5(Contants.API.CATEGORY_LIST), JSONUtil.toJSON(datas));
         mCategoryAdapter = new CategoryAdapter(getContext(), datas);
         mCategoryAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
@@ -297,7 +340,6 @@ public class CategoryFragment extends BaseFragment {
             mSliderLayout.stopAutoCycle();
         super.onStop();
     }
-
 
 
 }

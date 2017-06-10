@@ -6,16 +6,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.baidu.wallet.core.utils.Md5Utils;
+import com.cjj.MaterialRefreshLayout;
+import com.cjj.MaterialRefreshListener;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.google.gson.reflect.TypeToken;
 import com.yiwen.weshop.Contants;
 import com.yiwen.weshop.R;
 import com.yiwen.weshop.activity.WareListActivity;
@@ -27,7 +32,11 @@ import com.yiwen.weshop.bean.HomeCampaign;
 import com.yiwen.weshop.http.BaseCallback;
 import com.yiwen.weshop.http.OkHttpHelper;
 import com.yiwen.weshop.http.SpotsCallback;
+import com.yiwen.weshop.utils.JSONUtil;
+import com.yiwen.weshop.utils.PreferencesUtils;
 import com.yiwen.weshop.utils.ToastUtils;
+
+import org.xutils.view.annotation.ViewInject;
 
 import java.io.IOException;
 import java.util.List;
@@ -44,9 +53,12 @@ public class HomeFragment extends BaseFragment {
     SliderLayout   mSliderLayout;
     PagerIndicator mPagerIndicator;
     RecyclerView   mRecyclerView;
-    private OkHttpHelper        mHelper=OkHttpHelper.getInstance();
+    private OkHttpHelper mHelper = OkHttpHelper.getInstance();
     private List<Banner>        mBanners;
+    private List<HomeCampaign>  mHomeCampaigns;
     private HomeCategoryAdapter mAdapter;
+    @ViewInject(R.id.id_refresh_layout)
+    private MaterialRefreshLayout mRefreshLayout;
 
     @Nullable
     @Override
@@ -64,16 +76,52 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void init() {
+        mRefreshLayout.setLoadMore(true);
+        mRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
+            @Override
+            public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {
+                requestSlideImage();
+                requestRecyecleView();
+                mRefreshLayout.finishRefreshing();
+            }
+
+            @Override
+            public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
+                requestSlideImage();
+                requestRecyecleView();
+                mRefreshLayout.finishRefreshLoadMore();
+            }
+        });
 
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        checLocalData();
+
         requestSlideImage();
 
         requestRecyecleView();
     }
+
+    private void checLocalData() {
+        String banners = PreferencesUtils.getString(getActivity(),
+                Md5Utils.toMD5 (Contants.API.BANNER_HOME), null);
+        String homeCampaigns = PreferencesUtils.getString(getActivity(),
+                Md5Utils.toMD5(Contants.API.CAMPAIGN_HOME), null);
+        if (!TextUtils.isEmpty(banners) && !TextUtils.isEmpty(homeCampaigns)) {
+            mBanners = JSONUtil.fromJson(banners, new TypeToken<List<Banner>>() {
+            }.getType());
+            initSlider();
+            mHomeCampaigns = JSONUtil.fromJson(homeCampaigns, new TypeToken<List<HomeCampaign>>() {
+            }.getType());
+            initHomeCampaigns();
+            return;
+        }
+    }
+
 
     private void requestSlideImage() {
 
@@ -83,6 +131,8 @@ public class HomeFragment extends BaseFragment {
             public void onSuccess(Response response, List<Banner> banners) {
                 mBanners = banners;
                 initSlider();
+                PreferencesUtils.putString(getActivity(),
+                        Md5Utils.toMD5(Contants.API.BANNER_HOME), JSONUtil.toJSON(banners));
             }
 
             @Override
@@ -102,7 +152,7 @@ public class HomeFragment extends BaseFragment {
                     @Override
                     public void onSliderClick(BaseSliderView slider) {
                         // TODO: 2017/6/4 跳转活动页面
-                        ToastUtils.show(getActivity(),"跳转至"+slider.getDescription());
+                        ToastUtils.show(getActivity(), "跳转至" + slider.getDescription());
                     }
                 });
                 mSliderLayout.addSlider(textSliderView);
@@ -115,17 +165,17 @@ public class HomeFragment extends BaseFragment {
                 mSliderLayout.addOnPageChangeListener(new ViewPagerEx.OnPageChangeListener() {
                     @Override
                     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                  //      Log.d(TAG, "onPageScrolled: ");
+                        //      Log.d(TAG, "onPageScrolled: ");
                     }
 
                     @Override
                     public void onPageSelected(int position) {
-                   //     Log.d(TAG, "onPageSelected: ");
+                        //     Log.d(TAG, "onPageSelected: ");
                     }
 
                     @Override
                     public void onPageScrollStateChanged(int state) {
-                //        Log.d(TAG, "onPageScrollStateChanged: ");
+                        //        Log.d(TAG, "onPageScrollStateChanged: ");
                     }
                 });
             }
@@ -147,7 +197,11 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onSuccess(Response response, List<HomeCampaign> homeCampaigns) {
-                initData(homeCampaigns);
+                mHomeCampaigns = homeCampaigns;
+                initHomeCampaigns();
+                PreferencesUtils.putString(getActivity(),
+                        Md5Utils.toMD5(Contants.API.CAMPAIGN_HOME), JSONUtil.toJSON(homeCampaigns));
+
             }
 
             @Override
@@ -167,20 +221,25 @@ public class HomeFragment extends BaseFragment {
         });
     }
 
-    private void initData(List<HomeCampaign> homeCampaigns) {
-        mAdapter = new HomeCategoryAdapter(homeCampaigns, getActivity());
-        mAdapter.setOnCampaignClickListener(new HomeCategoryAdapter.OnCampaignClickListener() {
-            @Override
-            public void onClick(View view, Campaign campaign) {
-                Intent intent=new Intent(getActivity(), WareListActivity.class);
-                intent.putExtra(Contants.API.CAMPAIGN_ID,campaign.getId());
-                startActivity(intent);
-            }
-        });
+    private void initHomeCampaigns() {
+        if (mAdapter == null) {
+            mAdapter = new HomeCategoryAdapter(mHomeCampaigns, getActivity());
+            mAdapter.setOnCampaignClickListener(new HomeCategoryAdapter.OnCampaignClickListener() {
+                @Override
+                public void onClick(View view, Campaign campaign) {
+                    Intent intent = new Intent(getActivity(), WareListActivity.class);
+                    intent.putExtra(Contants.API.CAMPAIGN_ID, campaign.getId());
+                    startActivity(intent);
+                }
+            });
 
-        mRecyclerView.addItemDecoration(new CardViewtemDecortion());
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(mAdapter);
+            mRecyclerView.addItemDecoration(new CardViewtemDecortion());
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
+
     }
 
     @Override
