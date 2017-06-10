@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import com.yiwen.weshop.MyApplication;
 import com.yiwen.weshop.activity.LoginActivity;
 import com.yiwen.weshop.bean.User;
+import com.yiwen.weshop.utils.CommonUtils;
+import com.yiwen.weshop.utils.ToastUtils;
 
 import org.xutils.x;
 
@@ -23,7 +25,14 @@ public abstract class BaseFragment extends Fragment {
         x.view().inject(this, view);
         initToolBar();
         init();
+        checkNetword();
         return view;
+    }
+
+    private void checkNetword() {
+        if (!CommonUtils.isNetworkAvailable(getActivity())){
+            ToastUtils.show(getActivity(),"网络未连接，请打开网络");
+        }
     }
 
     public void initToolBar() {

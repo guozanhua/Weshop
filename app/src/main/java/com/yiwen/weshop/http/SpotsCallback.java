@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.yiwen.weshop.MyApplication;
 import com.yiwen.weshop.R;
 import com.yiwen.weshop.activity.LoginActivity;
+import com.yiwen.weshop.utils.CommonUtils;
 import com.yiwen.weshop.utils.ToastUtils;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ import okhttp3.Response;
 
 public abstract class SpotsCallback<T> extends BaseCallback<T> {
     private SpotsDialog mDialog;
-    private Context mContext;
+    private Context     mContext;
 
     public SpotsCallback(Context context) {
         mContext = context;
@@ -48,6 +49,11 @@ public abstract class SpotsCallback<T> extends BaseCallback<T> {
 
     @Override
     public void onRequestBefor(Request request) {
+
+        if (!CommonUtils.isNetworkAvailable(mContext)) {
+            ToastUtils.show(mContext, "网络未连接，请打开网络");
+            return;
+        }
         showDialog();
     }
 
