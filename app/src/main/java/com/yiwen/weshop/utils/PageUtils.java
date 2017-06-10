@@ -78,6 +78,7 @@ public class PageUtils {
                 } else {
                     Toast.makeText(context, R.string.no_have, Toast.LENGTH_SHORT).show();
                     sBuilder.refreshLayout.finishRefreshLoadMore();
+                    sBuilder.refreshLayout.setLoadMore(false);
                 }
             }
         });
@@ -123,6 +124,7 @@ public class PageUtils {
                 if (sBuilder.onPageChangeListener != null) {
                     sBuilder.onPageChangeListener.refresh(data, totalPage, totalCount);
                 }
+                ToastUtils.show(context,"刷新成功");
                 sBuilder.refreshLayout.finishRefresh();
                 break;
             case STATE_MORE:

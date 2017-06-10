@@ -99,15 +99,18 @@ public class MainActivity extends BaseActivity {
                             getSystemService(INPUT_METHOD_SERVICE);
                     manager.hideSoftInputFromWindow(MainActivity.this.getCurrentFocus().getWindowToken(),
                             InputMethodManager.HIDE_NOT_ALWAYS);
+
+                    if (TextUtils.isEmpty(v.getText())) {
+                        ToastUtils.show(MainActivity.this, "输入为空");
+                    }
+                    {
+                        ToastUtils.show(MainActivity.this, "搜索" + v.getText());//startSearch();
+                        Log.d(TAG, "onEditorAction: " + String.valueOf(actionId));
+                        mToolBar.getSearchEditText().setCursorVisible(false);
+                        return true;
+                    }
                 }
-                if (TextUtils.isEmpty(v.getText())){
-                    ToastUtils.show(MainActivity.this, "输入为空" );
-                }{
-                ToastUtils.show(MainActivity.this, "搜索" + v.getText());//startSearch();
-                Log.d(TAG, "onEditorAction: " + String.valueOf(actionId));
-                mToolBar.getSearchEditText().setCursorVisible(false);
                 return false;
-                }
             }
         });
     }

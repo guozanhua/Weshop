@@ -21,7 +21,7 @@ import com.cjj.MaterialRefreshListener;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.google.gson.reflect.TypeToken;
 import com.yiwen.weshop.Contants;
 import com.yiwen.weshop.R;
@@ -136,6 +136,8 @@ public class CategoryFragment extends BaseFragment {
                 } else {
                     Toast.makeText(getActivity(), "已经没有了哦!", Toast.LENGTH_SHORT).show();
                     mRefreshLayout.finishRefreshLoadMore();
+                    mRefreshLayout.setLoadMore(false);
+
                 }
             }
         });
@@ -215,7 +217,7 @@ public class CategoryFragment extends BaseFragment {
     }
 
     private void showWaresData(List<Wares> wares) {
-
+        mRefreshLayout.setLoadMore(true);
         switch (state) {
             case STATE_NORMAL:
                 if (mWaresAdapter == null) {
@@ -250,6 +252,7 @@ public class CategoryFragment extends BaseFragment {
             case STATE_REFRESH:
                 mWaresAdapter.refreshData(wares);
                 mWaresRecycleView.scrollToPosition(0);
+                ToastUtils.show(getActivity(),"刷新成功");
                 mRefreshLayout.finishRefresh();
                 break;
             case STATE_MORE:
@@ -284,18 +287,18 @@ public class CategoryFragment extends BaseFragment {
     private void showSliderView() {
         if (mBanners != null) {
             mSliderLayout.removeAllSliders();
-            for (Banner banner : mBanners) {
-                DefaultSliderView defaultSliderView = new DefaultSliderView(this.getActivity());
-                defaultSliderView.image(banner.getImgUrl());
-                defaultSliderView.description(banner.getName());
-                defaultSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+            for (final Banner banner : mBanners) {
+                TextSliderView SliderView = new TextSliderView(this.getActivity());
+                SliderView.image(banner.getImgUrl());
+                SliderView.description(banner.getName());
+                SliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
                     @Override
                     public void onSliderClick(BaseSliderView slider) {
                         // TODO: 2017/6/4 跳转活动页面
                         ToastUtils.show(getActivity(), "跳转至" + slider.getDescription());
                     }
                 });
-                mSliderLayout.addSlider(defaultSliderView);
+                mSliderLayout.addSlider(SliderView);
                 //        mSliderLayout.setCustomIndicator(mIndicator);
                 mSliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
                 mSliderLayout.setCustomAnimation(new DescriptionAnimation());
