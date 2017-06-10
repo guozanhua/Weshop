@@ -83,7 +83,7 @@ public class MyOrderActivity extends BaseActivity implements TabLayout.OnTabSele
     }
 
     private void initToolbar() {
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        mToolbar.setOnLeftButtonClickListener(new MyToolBar.OnLeftButtonClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();

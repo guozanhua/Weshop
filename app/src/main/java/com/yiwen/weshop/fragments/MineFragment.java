@@ -109,10 +109,13 @@ public class MineFragment extends BaseFragment {
     public void resetToolbar(Context context) {
         if (context instanceof MainActivity) {
             MainActivity mActivity = (MainActivity) context;
-            mToolbar = (MyToolBar) mActivity.findViewById(R.id.id_toolbar);
-            mToolbar.hideSearchview();
-            mToolbar.hideRightBtn();
-            mToolbar.setTitle(R.string.tab_mine);
+         //   mToolbar = (MyToolBar) mActivity.findViewById(R.id.id_toolbar);
+            mToolbar=mActivity.getMyToolbar();
+            if (mToolbar != null) {
+                mToolbar.hideSearchview();
+                mToolbar.hideRightBtn();
+                mToolbar.setTitle(R.string.tab_mine);
+            }
         }
     }
 
@@ -140,21 +143,21 @@ public class MineFragment extends BaseFragment {
 
     @Event(R.id.id_tv_my_address)
     private void toMyAddress(View v) {
-        startActivity(new Intent(getActivity(), AddressListActivity.class),true);
+        startActivity(new Intent(getActivity(), AddressListActivity.class), true);
     }
 
     @Event(R.id.id_tv_my_order)
     private void toMyOrder(View v) {
-        startActivity(new Intent(getActivity(), MyOrderActivity.class),true);
+        startActivity(new Intent(getActivity(), MyOrderActivity.class), true);
     }
 
     @Event(R.id.id_tv_my_favorites)
     private void toMyFavorites(View v) {
-        startActivity(new Intent(getActivity(), MyFavoriteActivity.class),true);
+        startActivity(new Intent(getActivity(), MyFavoriteActivity.class), true);
     }
 
     @Event(R.id.id_tv_my_msg)
     private void toMyMassage(View v) {
-        ToastUtils.show(getActivity(),"click 我的消息");
+        ToastUtils.show(getActivity(), "click 我的消息");
     }
 }

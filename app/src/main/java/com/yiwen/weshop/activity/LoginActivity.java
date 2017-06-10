@@ -53,10 +53,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        mToolbar.setOnLeftButtonClickListener(new MyToolBar.OnLeftButtonClickListener() {
             @Override
             public void onClick(View v) {
-                LoginActivity.this.onBackPressed();
+                onBackPressed();
             }
         });
     }

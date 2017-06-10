@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        app:navigationIcon="@drawable/icon_back_32px"
+        app:leftButtonIcon="@drawable/icon_back_32px"
         app:rightButtonIcon="@mipmap/icon_add"
         app:title="@string/my_addresses"/>
 

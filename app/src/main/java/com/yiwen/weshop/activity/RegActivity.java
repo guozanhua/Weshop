@@ -81,7 +81,7 @@ public class RegActivity extends BaseActivity {
                 getCode();
             }
         });
-        mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+        mToolBar.setOnLeftButtonClickListener(new MyToolBar.OnLeftButtonClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

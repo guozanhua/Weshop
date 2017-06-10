@@ -265,6 +265,12 @@ public class MyToolBar extends Toolbar {
         return toolbar_rightButton;
         return null;
     }
+    public ImageView getLeftImageView(){
+        if (toolbar_leftButton!=null)
+            return toolbar_leftButton;
+        return null;
+    }
+
     public EditText getSearchEditText(){
         if (toolbar_searchview!=null){
         return toolbar_searchview;

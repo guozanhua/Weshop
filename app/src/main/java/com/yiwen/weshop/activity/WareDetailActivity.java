@@ -107,6 +107,12 @@ public class WareDetailActivity extends BaseActivity implements View.OnClickList
                 WareDetailActivity.this.showShare();
             }
         });
+        mToolbar.setOnLeftButtonClickListener(new MyToolBar.OnLeftButtonClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void showShare() {

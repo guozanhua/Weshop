@@ -52,14 +52,14 @@ import okhttp3.Response;
  */
 public class HomeFragment extends BaseFragment {
     @ViewInject(R.id.slider)
-    SliderLayout   mSliderLayout;
+    SliderLayout mSliderLayout;
     PagerIndicator mPagerIndicator;
     @ViewInject(R.id.recyclerview)
-    RecyclerView   mRecyclerView;
+    RecyclerView mRecyclerView;
     private OkHttpHelper mHelper = OkHttpHelper.getInstance();
-    private List<Banner>        mBanners;
-    private List<HomeCampaign>  mHomeCampaigns;
-    private HomeCategoryAdapter mAdapter;
+    private List<Banner>          mBanners;
+    private List<HomeCampaign>    mHomeCampaigns;
+    private HomeCategoryAdapter   mAdapter;
     @ViewInject(R.id.id_refresh_layout)
     private MaterialRefreshLayout mRefreshLayout;
 
@@ -88,7 +88,7 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
-//                requestSlideImage();
+                //                requestSlideImage();
                 requestRecyecleView();
                 mRefreshLayout.finishRefreshLoadMore();
             }
@@ -109,7 +109,7 @@ public class HomeFragment extends BaseFragment {
 
     private void checkLocalData() {
         String banners = PreferencesUtils.getString(getActivity(),
-                Md5Utils.toMD5 (Contants.API.BANNER_HOME), null);
+                Md5Utils.toMD5(Contants.API.BANNER_HOME), null);
         String homeCampaigns = PreferencesUtils.getString(getActivity(),
                 Md5Utils.toMD5(Contants.API.CAMPAIGN_HOME), null);
         if (!TextUtils.isEmpty(banners) && !TextUtils.isEmpty(homeCampaigns)) {
@@ -189,8 +189,8 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onRequestBefor(Request request) {
-                if (!CommonUtils.isNetworkAvailable(getActivity())){
-                    ToastUtils.show(getActivity(),"网络未连接，请打开网络");
+                if (!CommonUtils.isNetworkAvailable(getActivity())) {
+                    ToastUtils.show(getActivity(), "网络未连接，请打开网络");
                     mRefreshLayout.finishRefresh();
                     mRefreshLayout.finishRefreshLoadMore();
                     return;
@@ -234,6 +234,10 @@ public class HomeFragment extends BaseFragment {
             mAdapter.setOnCampaignClickListener(new HomeCategoryAdapter.OnCampaignClickListener() {
                 @Override
                 public void onClick(View view, Campaign campaign) {
+                    if (!CommonUtils.isNetworkAvailable(getActivity())) {
+                        ToastUtils.show(getActivity(), "网络未连接，请打开网络");
+                        return;
+                    }
                     Intent intent = new Intent(getActivity(), WareListActivity.class);
                     intent.putExtra(Contants.API.CAMPAIGN_ID, campaign.getId());
                     startActivity(intent);

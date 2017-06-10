@@ -7,7 +7,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
         android:minWidth="0dp"
+        style="@style/Base.Widget.AppCompat.Toolbar.Button.Navigation"
         android:scaleType="centerInside"
         android:visibility="gone"/>
 

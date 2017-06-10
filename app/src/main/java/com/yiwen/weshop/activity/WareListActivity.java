@@ -82,7 +82,7 @@ public class WareListActivity extends BaseActivity implements SimpleAdapter.OnIt
     }
 
     private void initToolbar() {
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        mToolbar.setOnLeftButtonClickListener(new MyToolBar.OnLeftButtonClickListener() {
             @Override
             public void onClick(View v) {
                 WareListActivity.this.finish();

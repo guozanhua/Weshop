@@ -23,9 +23,11 @@ import com.yiwen.weshop.adapter.HotWaresAdapter;
 import com.yiwen.weshop.adapter.decoration.DividerItemDecoration;
 import com.yiwen.weshop.bean.Page;
 import com.yiwen.weshop.bean.Wares;
+import com.yiwen.weshop.utils.CommonUtils;
 import com.yiwen.weshop.utils.JSONUtil;
 import com.yiwen.weshop.utils.PageUtils;
 import com.yiwen.weshop.utils.PreferencesUtils;
+import com.yiwen.weshop.utils.ToastUtils;
 
 import org.xutils.view.annotation.ViewInject;
 
@@ -120,6 +122,10 @@ public class HotFragment extends BaseFragment {
             mAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
                 @Override
                 public void onClick(View v, int position) {
+                    if (!CommonUtils.isNetworkAvailable(getActivity())) {
+                        ToastUtils.show(getActivity(), "网络未连接，请打开网络");
+                        return;
+                    }
                     Wares item = mAdapter.getItem(position);
                     Intent intent = new Intent(getActivity(), WareDetailActivity.class);
                     intent.putExtra(Contants.API.WARE_ITEM, item);

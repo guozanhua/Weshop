@@ -113,9 +113,9 @@ public class AddressAddActivity extends AppCompatActivity {
                 createAddress();
             }
         });
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        mToolbar.setOnLeftButtonClickListener(new MyToolBar.OnLeftButtonClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 onBackPressed();
             }
         });

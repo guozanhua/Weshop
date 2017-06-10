@@ -61,14 +61,17 @@ public class CartFragment extends BaseFragment implements CartAdapter.OnDataUpda
     public void resetToolbar(final Context context) {
         if (context instanceof MainActivity) {
             MainActivity activity = (MainActivity) context;
-            mToolbar = (MyToolBar) activity.findViewById(R.id.id_toolbar);
-            mToolbar.hideSearchview();
-            mToolbar.setTitle(R.string.tab_cart);
-            mToolbar.setRightButtonText("编辑");
-            mToolbar.showRightBtn();
-            mToolbar.getRightButton().setTag(ACTION_EDIT);
-            //    mToolbar.setOnRightButtonClickListener(this);
-            mToolbar.getRightButton().setOnClickListener(this);
+        //    mToolbar = (MyToolBar) activity.findViewById(R.id.id_toolbar);
+            mToolbar=activity.getMyToolbar();
+            if (mToolbar!=null) {
+                mToolbar.hideSearchview();
+                mToolbar.setTitle(R.string.tab_cart);
+                mToolbar.setRightButtonText("编辑");
+                mToolbar.showRightBtn();
+                mToolbar.getRightButton().setTag(ACTION_EDIT);
+                //    mToolbar.setOnRightButtonClickListener(this);
+                mToolbar.getRightButton().setOnClickListener(this);
+            }
         }
     }
 

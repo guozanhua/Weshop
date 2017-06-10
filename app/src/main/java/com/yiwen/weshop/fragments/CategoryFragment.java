@@ -223,6 +223,10 @@ public class CategoryFragment extends BaseFragment {
                     mWaresAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
                         @Override
                         public void onClick(View v, int position) {
+                            if (!CommonUtils.isNetworkAvailable(getActivity())) {
+                                ToastUtils.show(getActivity(), "网络未连接，请打开网络");
+                                return;
+                            }
                             Intent intent = new Intent(getActivity(), WareDetailActivity.class);
                             intent.putExtra(Contants.API.WARE_ITEM, mWaresAdapter.getItem(position));
                             startActivity(intent);
@@ -279,6 +283,7 @@ public class CategoryFragment extends BaseFragment {
 
     private void showSliderView() {
         if (mBanners != null) {
+            mSliderLayout.removeAllSliders();
             for (Banner banner : mBanners) {
                 DefaultSliderView defaultSliderView = new DefaultSliderView(this.getActivity());
                 defaultSliderView.image(banner.getImgUrl());

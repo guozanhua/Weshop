@@ -52,7 +52,7 @@ public class MyFavoriteActivity extends BaseActivity implements FavoritesAdapter
     }
 
     private void initToolbar() {
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        mToolbar.setOnLeftButtonClickListener(new MyToolBar.OnLeftButtonClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();

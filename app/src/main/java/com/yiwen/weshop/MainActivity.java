@@ -2,8 +2,6 @@ package com.yiwen.weshop;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -63,24 +61,32 @@ public class MainActivity extends BaseActivity {
         initSeach();
     }
 
+    /**
+     * des:提供其他fragment 改变toolbar样式
+     * @return
+     */
+    public MyToolBar getMyToolbar(){
+        return mToolBar;
+    }
+
     private void initSeach() {
         // TODO: 2017/6/4  搜索功能 语音搜索
-        mToolBar.getSearchEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d(TAG, "onTextChanged: 输入"+s);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+//        mToolBar.getSearchEditText().addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                Log.d(TAG, "onTextChanged: 输入"+s);
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
         //按搜索触发
         mToolBar.getSearchEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
