@@ -81,9 +81,9 @@ public class HomeFragment extends BaseFragment {
         mRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
             @Override
             public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {
-//                requestSlideImage();
+                requestSlideImage();
                 requestRecyecleView();
-                mRefreshLayout.finishRefreshing();
+                mRefreshLayout.finishRefresh();
             }
 
             @Override
@@ -100,14 +100,14 @@ public class HomeFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        checLocalData();
+        checkLocalData();
 
         requestSlideImage();
 
         requestRecyecleView();
     }
 
-    private void checLocalData() {
+    private void checkLocalData() {
         String banners = PreferencesUtils.getString(getActivity(),
                 Md5Utils.toMD5 (Contants.API.BANNER_HOME), null);
         String homeCampaigns = PreferencesUtils.getString(getActivity(),

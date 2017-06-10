@@ -61,11 +61,11 @@ public class HotFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        checLocalData();
+        checkLocalData();
         getAndShowData();
     }
 
-    private void checLocalData() {
+    private void checkLocalData() {
         String wares = PreferencesUtils.getString(getActivity(),
                 Md5Utils.toMD5(Contants.API.HOT_WARES), null);
         if (!TextUtils.isEmpty(wares)) {

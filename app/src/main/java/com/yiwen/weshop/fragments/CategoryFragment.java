@@ -93,15 +93,15 @@ public class CategoryFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        checLocalData();
+        checkLocalData();
         requestCategoryData();
         requestBannerData();
         initRefreshLayout();
     }
 
-    private void checLocalData() {
+    private void checkLocalData() {
         String banners = PreferencesUtils.getString(getActivity(),
-                Md5Utils.toMD5(Contants.API.BANNER_HOME), null);
+                Md5Utils.toMD5("mBanners"), null);
         String categories = PreferencesUtils.getString(getActivity(),
                 Md5Utils.toMD5(Contants.API.CATEGORY_LIST), null);
         String wares = PreferencesUtils.getString(getActivity(),
@@ -266,7 +266,7 @@ public class CategoryFragment extends BaseFragment {
             public void onSuccess(Response response, List<Banner> banners) {
                 mBanners = banners;
                 PreferencesUtils.putString(getActivity(),
-                        Md5Utils.toMD5(Contants.API.BANNER_HOME), JSONUtil.toJSON(banners));
+                        Md5Utils.toMD5("mBanners"), JSONUtil.toJSON(banners));
                 showSliderView();
             }
 
