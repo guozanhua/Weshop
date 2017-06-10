@@ -159,28 +159,29 @@ public class HomeFragment extends BaseFragment {
                 });
                 mSliderLayout.addSlider(textSliderView);
                 //        mSliderLayout.setCustomIndicator(mIndicator);
-                mSliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-                mSliderLayout.setCustomAnimation(new DescriptionAnimation());
-                mSliderLayout.setPresetTransformer(SliderLayout.Transformer.RotateUp);
-                mSliderLayout.setDuration(3000);
-
-                mSliderLayout.addOnPageChangeListener(new ViewPagerEx.OnPageChangeListener() {
-                    @Override
-                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                        //      Log.d(TAG, "onPageScrolled: ");
-                    }
-
-                    @Override
-                    public void onPageSelected(int position) {
-                        //     Log.d(TAG, "onPageSelected: ");
-                    }
-
-                    @Override
-                    public void onPageScrollStateChanged(int state) {
-                        //        Log.d(TAG, "onPageScrollStateChanged: ");
-                    }
-                });
             }
+            mSliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+            mSliderLayout.setCustomAnimation(new DescriptionAnimation());
+            mSliderLayout.setPresetTransformer(SliderLayout.Transformer.RotateUp);
+            mSliderLayout.setDuration(3000);
+
+            mSliderLayout.addOnPageChangeListener(new ViewPagerEx.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    //      Log.d(TAG, "onPageScrolled: ");
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    //     Log.d(TAG, "onPageSelected: ");
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                    //        Log.d(TAG, "onPageScrollStateChanged: ");
+                }
+            });
+
         }
     }
 

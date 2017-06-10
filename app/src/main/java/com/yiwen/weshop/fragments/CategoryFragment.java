@@ -107,7 +107,7 @@ public class CategoryFragment extends BaseFragment {
         String wares = PreferencesUtils.getString(getActivity(),
                 Md5Utils.toMD5("mData"), null);
         if (!TextUtils.isEmpty(banners) && !TextUtils.isEmpty(categories)
-                &&!TextUtils.isEmpty(wares)) {
+                && !TextUtils.isEmpty(wares)) {
             mBanners = JSONUtil.fromJson(banners, new TypeToken<List<Banner>>() {
             }.getType());
             showSliderView();
@@ -176,8 +176,8 @@ public class CategoryFragment extends BaseFragment {
         mOkHttpHelper.doGet(url, new BaseCallback<Page<Wares>>() {
             @Override
             public void onRequestBefor(Request request) {
-                if (!CommonUtils.isNetworkAvailable(getActivity())){
-                    ToastUtils.show(getActivity(),"网络未连接，请打开网络");
+                if (!CommonUtils.isNetworkAvailable(getActivity())) {
+                    ToastUtils.show(getActivity(), "网络未连接，请打开网络");
                     mRefreshLayout.finishRefresh();
                     mRefreshLayout.finishRefreshLoadMore();
                     return;
@@ -252,7 +252,7 @@ public class CategoryFragment extends BaseFragment {
             case STATE_REFRESH:
                 mWaresAdapter.refreshData(wares);
                 mWaresRecycleView.scrollToPosition(0);
-                ToastUtils.show(getActivity(),"刷新成功");
+                ToastUtils.show(getActivity(), "刷新成功");
                 mRefreshLayout.finishRefresh();
                 break;
             case STATE_MORE:
@@ -300,11 +300,12 @@ public class CategoryFragment extends BaseFragment {
                 });
                 mSliderLayout.addSlider(SliderView);
                 //        mSliderLayout.setCustomIndicator(mIndicator);
-                mSliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-                mSliderLayout.setCustomAnimation(new DescriptionAnimation());
-                mSliderLayout.setPresetTransformer(SliderLayout.Transformer.Fade);
-                mSliderLayout.setDuration(3000);
             }
+            mSliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+            mSliderLayout.setCustomAnimation(new DescriptionAnimation());
+            mSliderLayout.setPresetTransformer(SliderLayout.Transformer.Fade);
+            mSliderLayout.setDuration(3000);
+
         }
     }
 
@@ -339,7 +340,7 @@ public class CategoryFragment extends BaseFragment {
                 Category category = mCategoryAdapter.getItem(position);
                 categoryId = category.getId();
                 curPage = 1;
-                state = STATE_REFRESH;
+                state = STATE_NORMAL;
                 requestWares(categoryId);
             }
         });
