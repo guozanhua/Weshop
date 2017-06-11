@@ -111,6 +111,7 @@ public class CategoryFragment extends BaseFragment {
             mBanners = JSONUtil.fromJson(banners, new TypeToken<List<Banner>>() {
             }.getType());
             showSliderView();
+            Log.d(TAG, "checkLocalData: ");
             mCategories = JSONUtil.fromJson(categories, new TypeToken<List<Category>>() {
             }.getType());
             showCategoryData(mCategories);
@@ -253,6 +254,7 @@ public class CategoryFragment extends BaseFragment {
                 mWaresAdapter.refreshData(wares);
                 mWaresRecycleView.scrollToPosition(0);
                 ToastUtils.show(getActivity(), "刷新成功");
+                requestBannerData();
                 mRefreshLayout.finishRefresh();
                 break;
             case STATE_MORE:
