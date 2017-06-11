@@ -38,6 +38,12 @@ public class MyApplication extends Application {
         return sInstance;
     }
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+       // MultiDex.install(this);
+    }
+
     private User mUser;
 
     private void initUser() {

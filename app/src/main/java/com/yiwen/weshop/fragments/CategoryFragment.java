@@ -287,7 +287,7 @@ public class CategoryFragment extends BaseFragment {
     private void showSliderView() {
         if (mBanners != null) {
             mSliderLayout.removeAllSliders();
-            for (final Banner banner : mBanners) {
+            for (Banner banner : mBanners) {
                 TextSliderView SliderView = new TextSliderView(this.getActivity());
                 SliderView.image(banner.getImgUrl());
                 SliderView.description(banner.getName());
@@ -300,12 +300,12 @@ public class CategoryFragment extends BaseFragment {
                 });
                 mSliderLayout.addSlider(SliderView);
                 //        mSliderLayout.setCustomIndicator(mIndicator);
-            }
-            mSliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-            mSliderLayout.setCustomAnimation(new DescriptionAnimation());
-            mSliderLayout.setPresetTransformer(SliderLayout.Transformer.Fade);
-            mSliderLayout.setDuration(3000);
 
+                mSliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+                mSliderLayout.setCustomAnimation(new DescriptionAnimation());
+                mSliderLayout.setPresetTransformer(SliderLayout.Transformer.ZoomOut);
+                mSliderLayout.setDuration(3000);
+            }
         }
     }
 
