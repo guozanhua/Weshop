@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -92,6 +93,10 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "onSuccess: " + userLoginRespMsg.getMessage());
                     return;
                 }
+                InputMethodManager manager = (InputMethodManager)
+                        getSystemService(INPUT_METHOD_SERVICE);
+                manager.hideSoftInputFromWindow(LoginActivity.this.getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
                 MyApplication application = MyApplication.getInstance();
                 application.putUser(userLoginRespMsg.getData(), userLoginRespMsg.getToken());
                 if (application.getIntent() == null) {
